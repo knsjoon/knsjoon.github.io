@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AHEAD: Anticipatory Hand-Driven Teleoperation via Human Intent Prediction.">
+  <title>AHEAD — Seok Joon Kim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="project-page">
+  <header class="site-header">
+    <a class="wordmark" href="../index.html">SJK<span>.</span></a>
+    <button class="menu-button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav id="site-nav" class="site-nav"><a href="../index.html#work">Work</a><a href="../index.html#about">About</a><a href="../Curriculum_Vitae_Robotics_2024.pdf" target="_blank">CV ↗</a></nav>
+  </header>
+  <main>
+    <section class="project-hero wrap">
+      <p class="eyebrow reveal">IROS 2026 submission · Teleoperation</p>
+      <h1 class="reveal">AHEAD: Anticipatory Hand-Driven Teleoperation</h1>
+      <div class="project-summary reveal">
+        <p class="lead">Predicting human intent from natural hand motion so robots can begin acting before an explicit command.</p>
+        <dl class="project-facts">
+          <div><dt>Authors</dt><dd>Seok Joon Kim, Joonho Lee, Federica Spinola, Taein Kwon, Mohsen Moghaddam</dd></div>
+          <div><dt>Topics</dt><dd>VR, intent prediction, HRI, digital twins</dd></div>
+          <div><dt>Status</dt><dd>IROS 2026 submission</dd></div>
+        </dl>
+      </div>
+    </section>
+    <div class="paper-stage"><img src="../assets/ahead-cover.png" alt="First page of the AHEAD paper"></div>
+    <section class="project-body">
+      <div class="wrap project-body-grid">
+        <div><p class="eyebrow">The research</p></div>
+        <div class="project-body-text">
+          <h2>Faster reactions, lower operator effort.</h2>
+          <p class="lead">Direct teleoperation gives precise control but demands constant correction. Goal-based control reduces that burden, yet forces the robot to wait. AHEAD combines the strengths of both.</p>
+          <p>Inside a VR digital twin, an operator performs natural pick-and-place motions. AHEAD processes recent 3D hand and head signals together with scene context, predicts the intended object and target slot, and converts those predictions into stable robot goals.</p>
+          <div class="contributions">
+            <div class="contribution"><span>01</span><div><h3>Anticipatory control</h3><p>A preview-and-commit policy initiates conservative motion early and commits once intent becomes reliable.</p></div></div>
+            <div class="contribution"><span>02</span><div><h3>Hand-driven intent prediction</h3><p>Attention-based classifiers infer grasp and placement goals from streaming hand joints, head pose, and scene geometry.</p></div></div>
+            <div class="contribution"><span>03</span><div><h3>Human-subject validation</h3><p>A 15-participant study found reduced robot reaction time and operator workload relative to the baselines.</p></div></div>
+          </div>
+          <div class="project-actions"><a class="button button-dark" href="../IROS2026_AHEAD.pdf" target="_blank">Read paper <span>↗</span></a><a class="button button-outline" href="../index.html#work">All projects <span>←</span></a></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer wrap"><span>© <span id="year"></span> Seok Joon Kim</span><span>AHEAD</span><a href="#top">Back to top ↑</a></footer>
+  <script src="../script.js"></script>
+</body>
+</html>
