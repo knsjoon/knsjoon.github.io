@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Geometric Exploitation for Indoor Panoramic Semantic Segmentation.">
+  <title>Geometric Exploitation for Indoor Panoramic Semantic Segmentation — Seok Joon Kim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="project-page">
+  <header class="site-header"><a class="wordmark" href="../../index.html">Seok Joon Kim</a><button class="menu-button" aria-expanded="false" aria-controls="site-nav">Menu</button><nav id="site-nav" class="site-nav" aria-label="Primary navigation"><a href="../../index.html#about">About</a><a href="../../index.html#experience">Experience</a><a href="../../index.html#publications">Publications</a><a href="../../Curriculum_Vitae_Robotics_2024.pdf" target="_blank" rel="noreferrer">CV</a></nav></header>
+  <main id="top">
+    <section class="project-hero wrap"><p class="eyebrow">NeurIPS 2024 · Computer vision</p><h1>Geometric Exploitation for Indoor Panoramic Semantic Segmentation</h1><div class="project-summary"><p class="lead">A geometry-aware approach to semantic understanding of indoor 360° panoramic images.</p><dl class="project-facts"><div><dt>Authors</dt><dd>Duc Cao Dinh, <strong>Seok Joon Kim</strong>, Kyusung Cho</dd></div><div><dt>Venue</dt><dd>Advances in Neural Information Processing Systems 37</dd></div><div><dt>DOI</dt><dd>10.52202/079017-0830</dd></div></dl></div></section>
+
+    <section class="project-body"><div class="wrap project-body-grid"><div><p class="eyebrow">The research</p></div><div class="project-body-text">
+      <h2>Using indoor geometry to resolve panoramic ambiguity.</h2>
+      <p class="lead">The method treats an indoor panorama as two related segmentation problems: over-sampled planar regions such as floors and ceilings, and under-sampled regions representing the remaining scene.</p>
+      <p>Floor and ceiling predictions are trained jointly with dense depth estimation. For other classes, a transformer-based context module combines global image features, hidden features, point-cloud geometry, vertical relative distances, and planar masks. A high-resolution branch preserves fine prediction boundaries.</p>
+      <div class="key-results"><div class="key-result"><strong>56.8%</strong><span>mIoU on Stanford2D3D Fold 1</span></div><div class="key-result"><strong>71.7%</strong><span>mIoU on Structured3D</span></div><div class="key-result"><strong>3 datasets</strong><span>real-world and synthetic evaluation</span></div></div>
+      <div class="contributions"><div class="contribution"><span>01</span><div><h3>Task decomposition</h3><p>Separate optimization strategies address the distinct geometry and sampling behavior of planar and non-planar regions.</p></div></div><div class="contribution"><span>02</span><div><h3>Vertical relative distance</h3><p>Distances to the floor and ceiling provide a compact geometric description of each indoor panorama.</p></div></div><div class="contribution"><span>03</span><div><h3>Geometric context aggregation</h3><p>A transformer module combines complementary 2D and 3D representations before semantic prediction.</p></div></div></div>
+    </div></div></section>
+
+    <section class="figure-section"><div class="wrap">
+      <div class="figure-section-header"><p class="eyebrow">Inside the paper</p><div><h2>Geometry enters at every stage</h2><p>The extracted paper figures show the central decomposition, the hybrid network, and qualitative comparisons.</p></div></div>
+      <figure class="project-figure"><img src="images/decomposition.webp" alt="Panorama split into over-sampled and under-sampled semantic regions"><figcaption><strong>Problem decomposition.</strong> Floor and ceiling regions are optimized separately from the remaining semantic classes, then merged into a complete panorama.</figcaption></figure>
+      <figure class="project-figure"><img src="images/architecture.webp" alt="Network architecture for geometry-aware panoramic segmentation"><figcaption><strong>Architecture.</strong> Dense depth, point-cloud geometry, vertical distances, planar masks, global context, and a high-resolution branch contribute to the final segmentation.</figcaption></figure>
+      <figure class="project-figure"><img src="images/comparison.webp" alt="Qualitative panoramic segmentation comparison across methods"><figcaption><strong>Qualitative comparison.</strong> Predictions are compared with prior panoramic segmentation systems and ground truth across challenging indoor scenes.</figcaption></figure>
+      <div class="project-actions"><a class="button button-dark" href="paper.pdf" target="_blank" rel="noreferrer">Read paper</a><a class="button" href="https://github.com/caodinhduc/vertical_relative_distance" target="_blank" rel="noreferrer">Code</a><a class="button" href="../../index.html#publications">All publications</a></div>
+    </div></section>
+  </main>
+  <footer class="site-footer wrap"><span>© <span id="year"></span> Seok Joon Kim</span><a href="#top">Back to top</a></footer><script src="../../script.js"></script>
+</body>
+</html>

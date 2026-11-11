@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AHEAD: Anticipatory Hand-Driven Teleoperation via Human Intent Prediction.">
+  <title>AHEAD — Seok Joon Kim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="project-page">
+  <header class="site-header"><a class="wordmark" href="../../index.html">Seok Joon Kim</a><button class="menu-button" aria-expanded="false" aria-controls="site-nav">Menu</button><nav id="site-nav" class="site-nav" aria-label="Primary navigation"><a href="../../index.html#about">About</a><a href="../../index.html#experience">Experience</a><a href="../../index.html#publications">Publications</a><a href="../../Curriculum_Vitae_Robotics_2024.pdf" target="_blank" rel="noreferrer">CV</a></nav></header>
+  <main id="top">
+    <section class="project-hero wrap">
+      <p class="eyebrow">IEEE/RSJ IROS 2026 · Teleoperation</p>
+      <h1>AHEAD: Anticipatory Hand-Driven Teleoperation via Human Intent Prediction</h1>
+      <div class="project-summary">
+        <p class="lead">Predicting intent from natural hand motion so a remote robot can begin moving before an explicit command arrives.</p>
+        <dl class="project-facts"><div><dt>Authors</dt><dd><strong>Seok Joon Kim</strong>, Joonho Lee, Federica Spinola, Taein Kwon, Mohsen Moghaddam</dd></div><div><dt>Topics</dt><dd>VR teleoperation, intent prediction, shared autonomy</dd></div><div><dt>Venue</dt><dd>IEEE/RSJ IROS 2026</dd></div></dl>
+      </div>
+    </section>
+
+    <section class="project-body"><div class="wrap project-body-grid"><div><p class="eyebrow">The research</p></div><div class="project-body-text">
+      <h2>Reducing the wait between human intent and robot action.</h2>
+      <p class="lead">Direct teleoperation is precise but asks the operator to continuously correct the robot. Goal-based control reduces that burden, yet the robot normally waits for each explicit goal. AHEAD uses the operator’s ongoing movement as an early signal.</p>
+      <p>Within a mirrored VR workspace, the system processes a rolling window of tracked 3D hand joints, head pose, and scene geometry. Attention-based classifiers estimate which object the operator intends to grasp and which slot they intend to use. A state machine turns those predictions into stable preview and commit motions.</p>
+      <div class="key-results"><div class="key-result"><strong>76%</strong><span>Top-1 accuracy for both object and slot intent</span></div><div class="key-result"><strong>0.6 s</strong><span>reduction in object reaction time</span></div><div class="key-result"><strong>1.4 s</strong><span>reduction in slot reaction time</span></div></div>
+      <div class="contributions"><div class="contribution"><span>01</span><div><h3>Hand-driven intent prediction</h3><p>An attention-based model combines recent hand and head motion with compact geometric descriptions of scene entities.</p></div></div><div class="contribution"><span>02</span><div><h3>Preview-and-commit control</h3><p>The robot moves conservatively toward a likely goal, then commits only after the prediction becomes reliable.</p></div></div><div class="contribution"><span>03</span><div><h3>Human-subject evaluation</h3><p>A 15-participant study evaluates robot response time, intent accuracy, and perceived workload.</p></div></div></div>
+    </div></div></section>
+
+    <section class="figure-section"><div class="wrap">
+      <div class="figure-section-header"><p class="eyebrow">Inside the paper</p><div><h2>From motion to proactive assistance</h2><p>The figures below show the complete loop: immersive task input, training data collection, and early robot motion.</p></div></div>
+      <figure class="project-figure"><img src="images/overview.webp" alt="AHEAD real workspace, VR digital twin, and anticipation timeline"><figcaption><strong>System overview.</strong> The operator reaches naturally in VR while AHEAD predicts the target object and placement slot. The physical robot begins approaching the predicted goal before grasp or release confirmation.</figcaption></figure>
+      <figure class="project-figure"><img src="images/data-collection.webp" alt="Eight stages of the AHEAD VR data collection procedure"><figcaption><strong>Data collection.</strong> Each demonstration covers approach, grasp, transport, placement, release, and confirmation, with synchronized hand, head, scene, and event data.</figcaption></figure>
+      <figure class="project-figure"><img src="images/proactive-motion.webp" alt="AHEAD preview and commit motion sequence"><figcaption><strong>Preview and commit.</strong> AHEAD first approaches the neighborhood of a predicted object, refines its goal as the hand gets closer, and commits once confidence and proximity conditions are met.</figcaption></figure>
+      <div class="project-actions"><a class="button button-dark" href="paper.pdf" target="_blank" rel="noreferrer">Read paper</a><a class="button" href="../../index.html#publications">All publications</a></div>
+    </div></section>
+  </main>
+  <footer class="site-footer wrap"><span>© <span id="year"></span> Seok Joon Kim</span><a href="#top">Back to top</a></footer><script src="../../script.js"></script>
+</body>
+</html>
