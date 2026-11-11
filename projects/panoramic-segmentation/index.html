@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Geometric Exploitation for Indoor Panoramic Semantic Segmentation.">
+  <meta name="description" content="Geometric Exploitation for Indoor Panoramic Semantic Segmentation. NeurIPS 2024.">
   <title>Geometric Exploitation for Indoor Panoramic Semantic Segmentation — Seok Joon Kim</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="../../styles.css">
@@ -10,23 +10,113 @@
 <body class="project-page">
   <header class="site-header"><a class="wordmark" href="../../index.html">Seok Joon Kim</a><button class="menu-button" aria-expanded="false" aria-controls="site-nav">Menu</button><nav id="site-nav" class="site-nav" aria-label="Primary navigation"><a href="../../index.html#about">About</a><a href="../../index.html#experience">Experience</a><a href="../../awards/">Awards</a><a href="../../index.html#publications">Publications</a><a href="../../Curriculum_Vitae_Robotics_2024.pdf" target="_blank" rel="noreferrer">CV</a></nav></header>
   <main id="top">
-    <section class="project-hero wrap"><p class="eyebrow">NeurIPS 2024 · Computer vision</p><h1>Geometric Exploitation for Indoor Panoramic Semantic Segmentation</h1><div class="project-summary"><p class="lead">A geometry-aware approach to semantic understanding of indoor 360° panoramic images.</p><dl class="project-facts"><div><dt>Authors</dt><dd>Duc Cao Dinh, <strong>Seok Joon Kim</strong>, Kyusung Cho</dd></div><div><dt>Venue</dt><dd>Advances in Neural Information Processing Systems 37</dd></div><div><dt>DOI</dt><dd>10.52202/079017-0830</dd></div></dl></div></section>
+    <section class="project-hero wrap">
+      <p class="eyebrow">NeurIPS 2024 · Computer vision</p>
+      <h1>Geometric Exploitation for Indoor Panoramic Semantic Segmentation</h1>
+      <div class="project-summary">
+        <p class="lead">Indoor 360° panoramas are dominated by floors and ceilings. Segmenting those separately, with the help of depth, and describing every other pixel by its height between them sets a new state of the art on three benchmarks.</p>
+        <dl class="project-facts"><div><dt>Authors</dt><dd>Duc Cao Dinh, <strong>Seok Joon Kim</strong>, Kyusung Cho</dd></div><div><dt>Topics</dt><dd>Panoramic semantic segmentation, depth estimation, indoor scene geometry</dd></div><div><dt>Venue</dt><dd>Advances in Neural Information Processing Systems 37 (NeurIPS), 2024</dd></div><div><dt>DOI</dt><dd>10.52202/079017-0830</dd></div></dl>
+      </div>
+      <div class="project-links"><a class="button button-dark" href="paper.pdf" target="_blank" rel="noreferrer">Paper (PDF)</a><a class="button" href="https://github.com/caodinhduc/vertical_relative_distance" target="_blank" rel="noreferrer">Code</a><a class="button" href="#citation">Cite</a></div>
+    </section>
 
-    <section class="project-body"><div class="wrap project-body-grid"><div><p class="eyebrow">The research</p></div><div class="project-body-text">
-      <h2>Using indoor geometry to resolve panoramic ambiguity.</h2>
-      <p class="lead">The method treats an indoor panorama as two related segmentation problems: over-sampled planar regions such as floors and ceilings, and under-sampled regions representing the remaining scene.</p>
-      <p>Floor and ceiling predictions are trained jointly with dense depth estimation. For other classes, a transformer-based context module combines global image features, hidden features, point-cloud geometry, vertical relative distances, and planar masks. A high-resolution branch preserves fine prediction boundaries.</p>
-      <div class="key-results"><div class="key-result"><strong>56.8%</strong><span>mIoU on Stanford2D3D Fold 1</span></div><div class="key-result"><strong>71.7%</strong><span>mIoU on Structured3D</span></div><div class="key-result"><strong>3 datasets</strong><span>real-world and synthetic evaluation</span></div></div>
-      <div class="contributions"><div class="contribution"><span>01</span><div><h3>Task decomposition</h3><p>Separate optimization strategies address the distinct geometry and sampling behavior of planar and non-planar regions.</p></div></div><div class="contribution"><span>02</span><div><h3>Vertical relative distance</h3><p>Distances to the floor and ceiling provide a compact geometric description of each indoor panorama.</p></div></div><div class="contribution"><span>03</span><div><h3>Geometric context aggregation</h3><p>A transformer module combines complementary 2D and 3D representations before semantic prediction.</p></div></div></div>
+    <nav class="paper-toc" aria-label="Sections"><ol class="wrap">
+      <li><a href="#motivation">Motivation</a></li><li><a href="#method">Method</a></li><li><a href="#geometry">Vertical relative distance</a></li><li><a href="#results">Results</a></li><li><a href="#ablation">Ablation</a></li><li><a href="#limitations">Limitations</a></li><li><a href="#citation">Citation</a></li>
+    </ol></nav>
+
+    <section id="motivation" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>1</span><p>Motivation</p></div><div class="paper-content">
+      <h2>Equirectangular panoramas over-sample floors and ceilings.</h2>
+      <p class="lead">Panoramic semantic segmentation (PASS) labels every pixel of a 360° image. Most methods treat it as a 2D distortion problem and ignore the spatial structure of indoor scenes, which leaves monocular ambiguities unresolved.</p>
+      <p>Projecting a sphere onto a rectangle stretches the regions near the poles: in Stanford2D3DS, ceilings and floors cover on average 18% and 20% of each panorama. A single network trained on the whole image therefore favours these large, easy classes and struggles with small objects near the equator, such as chairs and tables. We reformulate the task as two groups with different optimisation strategies:</p>
+      <ul>
+        <li><strong>Over-sampled segments:</strong> floor and ceiling, learned jointly with dense depth estimation.</li>
+        <li><strong>Under-sampled segments:</strong> all other classes, predicted by a decoder that exploits the room’s geometry.</li>
+      </ul>
+      <figure class="project-figure"><img src="images/decomposition.webp" alt="Panorama decomposed into over-sampled floor and ceiling segments and under-sampled object segments" loading="lazy"><figcaption><strong>Figure 1.</strong> Panoramic segmentation reformulated as estimating over-sampled segments (floor, ceiling) and under-sampled segments (chair, table, bookcase, window, …), merged into the final result.</figcaption></figure>
+      <div class="key-results"><div class="key-result"><strong>56.8%</strong><span>mIoU on Stanford2D3DS fold 1 (Trans4PASS+ baseline: 53.6%)</span></div><div class="key-result"><strong>71.7%</strong><span>mIoU on the Structured3D test set</span></div><div class="key-result"><strong>33.1%</strong><span>mIoU on the Matterport3D test set, from RGB only</span></div></div>
     </div></div></section>
 
-    <section class="figure-section"><div class="wrap">
-      <div class="figure-section-header"><p class="eyebrow">Inside the paper</p><div><h2>Geometry enters at every stage</h2><p>The extracted paper figures show the central decomposition, the hybrid network, and qualitative comparisons.</p></div></div>
-      <figure class="project-figure"><img src="images/decomposition.webp" alt="Panorama split into over-sampled and under-sampled semantic regions"><figcaption><strong>Problem decomposition.</strong> Floor and ceiling regions are optimized separately from the remaining semantic classes, then merged into a complete panorama.</figcaption><div class="figure-analysis"><p>Equirectangular projection stretches the poles of a panorama, so floors and ceilings occupy disproportionately many pixels while objects near the equator are compressed. The method explicitly separates these over-sampled planar classes from the remaining semantics, uses depth-supervised geometry to model them, and then recombines both predictions. This prevents dominant horizontal surfaces from overwhelming the learning signal for smaller classes.</p></div></figure>
-      <figure class="project-figure"><img src="images/architecture.webp" alt="Network architecture for geometry-aware panoramic segmentation"><figcaption><strong>Architecture.</strong> Dense depth, point-cloud geometry, vertical distances, planar masks, global context, and a high-resolution branch contribute to the final segmentation.</figcaption><div class="figure-analysis"><p>The network reconstructs 3D point-cloud cues from predicted depth and derives vertical distances to the estimated floor and ceiling. A transformer-based context module aggregates these geometric signals with global RGB features and intermediate encoder features, while a parallel high-resolution branch restores boundaries lost during downsampling. Geometry therefore contributes both global room structure and local boundary evidence.</p></div></figure>
-      <figure class="project-figure"><img src="images/comparison.webp" alt="Qualitative panoramic segmentation comparison across methods"><figcaption><strong>Qualitative comparison.</strong> Predictions are compared with prior panoramic segmentation systems and ground truth across challenging indoor scenes.</figcaption><div class="figure-analysis"><p>The qualitative comparisons highlight cases where appearance alone confuses similarly textured walls, boards, doors, and windows. The added room geometry produces more coherent planar regions and cleaner object boundaries. Quantitatively, the complete model reaches 56.8% mIoU on Stanford2D3D Fold 1 and 71.7% on Structured3D, with evaluation spanning three real and synthetic panoramic datasets.</p></div></figure>
-      <div class="project-actions"><a class="button button-dark" href="paper.pdf" target="_blank" rel="noreferrer">Read paper</a><a class="button" href="https://github.com/caodinhduc/vertical_relative_distance" target="_blank" rel="noreferrer">Code</a><a class="button" href="../../index.html#publications">All publications</a></div>
-    </div></section>
+    <section id="method" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>2</span><p>Method</p></div><div class="paper-content">
+      <h2>Two branches that share one encoder.</h2>
+      <figure class="project-figure"><img src="images/architecture.webp" alt="Network with an encoder, a floor-ceiling and depth branch, and a hybrid decoder for other classes" loading="lazy"><figcaption><strong>Figure 2.</strong> An encoder extracts image features; one branch estimates the over-sampled segments together with dense depth; a hybrid decoder estimates the under-sampled segments; the two are merged into the final segmentation.</figcaption></figure>
+      <h3>Encoder</h3>
+      <p>The encoder follows Trans4PASS+, producing features at 1/4 to 1/32 resolution, with deformable patch embeddings to handle panoramic distortion.</p>
+      <h3>Over-sampled segments and depth</h3>
+      <p>A light decoder predicts dense depth and a three-class mask (floor, ceiling, unknown) from a shared hidden feature map. Because floors and ceilings are planar, a plane surface-normal loss enforces planarity of the predicted depth inside the ground-truth floor and ceiling masks, which makes the later plane fitting accurate.</p>
+      <h3>Under-sampled segments: a hybrid decoder</h3>
+      <p>A transformer-based context module (six encoder layers) attends jointly over five representations of the scene: global image features, the hidden features of the depth branch (cross-task distillation), a 3D point cloud back-projected from predicted depth, the vertical relative distance (next section), and the predicted floor and ceiling masks. Transformer outputs are coarse, so a parallel high-resolution branch adds fine image features to keep mask boundaries sharp. Finally, the two predictions are merged, with floor and ceiling taking priority where they overlap.</p>
+    </div></div></section>
+
+    <section id="geometry" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>3</span><p>Key idea</p></div><div class="paper-content">
+      <h2>Vertical relative distance: where a pixel sits between floor and ceiling.</h2>
+      <p>Indoor scenes follow strong regularities: chairs rest on the floor and lights hang from the ceiling, and since floor and ceiling are parallel planes, a point’s distances to the two always sum to roughly the room height. We fit a plane to the floor points and another to the ceiling points of the predicted point cloud (least squares), then compute each pixel’s distance to both planes. The resulting two-channel map is a compact description of each pixel’s height in the room.</p>
+      <figure class="project-figure"><img src="images/vertical-distance.webp" alt="Input panorama, predicted ceiling and floor masks, dense depth, and distance-to-ceiling and distance-to-floor maps" loading="lazy"><figcaption><strong>Figure 3.</strong> From the image, predicted floor and ceiling masks, and dense depth, the method derives the distance of every pixel to the ceiling and to the floor (light = far, dark = near).</figcaption></figure>
+    </div></div></section>
+
+    <section id="results" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>4</span><p>Results</p></div><div class="paper-content">
+      <h2>State of the art on real and synthetic benchmarks.</h2>
+      <p>Evaluated on Stanford2D3DS (1,413 real panoramas, 13 classes), Matterport3D (10,800 real panoramas, 40 classes), and Structured3D (21,835 synthetic panoramas, 40 classes).</p>
+      <div class="table-wrap"><table class="result-table">
+        <caption><strong>Table 1.</strong> mIoU (%) on Stanford2D3DS: average over the three official folds, and fold 1.</caption>
+        <thead><tr><th>Method</th><th>Avg mIoU</th><th>Fold 1 mIoU</th></tr></thead>
+        <tbody>
+          <tr><td>Trans4PASS+ (baseline)</td><td>53.7</td><td>53.6</td></tr>
+          <tr><td>SGAT4PASS</td><td>55.3</td><td>56.4</td></tr>
+          <tr class="highlight"><td>Ours</td><td>55.5</td><td>56.8</td></tr>
+        </tbody>
+      </table></div>
+      <div class="table-wrap"><table class="result-table">
+        <caption><strong>Table 2.</strong> mIoU (%) on Structured3D and Matterport3D, RGB input.</caption>
+        <thead><tr><th>Method</th><th>Structured3D val</th><th>Structured3D test</th><th>Matterport3D val</th><th>Matterport3D test</th></tr></thead>
+        <tbody>
+          <tr><td>PanoFormer</td><td>55.57</td><td>54.87</td><td>30.04</td><td>26.87</td></tr>
+          <tr><td>Trans4PASS+</td><td>66.74</td><td>66.90</td><td>33.43</td><td>29.21</td></tr>
+          <tr><td>SFSS-MMSI</td><td>71.94</td><td>68.34</td><td>35.15</td><td>31.30</td></tr>
+          <tr class="highlight"><td>Ours</td><td>72.86</td><td>71.66</td><td>36.42</td><td>33.06</td></tr>
+        </tbody>
+      </table></div>
+      <p>From RGB alone, the results on Matterport3D are competitive with methods that also take a depth image as input. Qualitatively, geometry helps most where appearance is ambiguous, for example a whiteboard and a wall of similar colour, and yields cleaner small segments such as chairs, boards, and tables. The jointly learned depth also beats FreDSNet, a multi-task segmentation and depth model, on every depth metric (for example, RMSE 0.390 vs. 0.518).</p>
+      <figure class="project-figure"><img src="images/comparison.webp" alt="Qualitative comparison of Trans4PASS+, SGAT4PASS, ours, and ground truth on Stanford2D3DS" loading="lazy"><figcaption><strong>Figure 5.</strong> Qualitative comparison on Stanford2D3DS with Trans4PASS+ and SGAT4PASS; dashed boxes highlight the improvements.</figcaption></figure>
+    </div></div></section>
+
+    <section id="ablation" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>5</span><p>Ablation</p></div><div class="paper-content">
+      <h2>Every geometric representation contributes.</h2>
+      <p>Adding the representations one by one to the context module (Stanford2D3DS, fold 1) improves accuracy at each step; the vertical relative distance gives the largest single gain.</p>
+      <div class="table-wrap"><table class="result-table">
+        <caption><strong>Table 3.</strong> Inputs to the transformer-based context module.</caption>
+        <thead><tr><th>Context inputs</th><th>mIoU (%)</th><th>Pixel acc. (%)</th></tr></thead>
+        <tbody>
+          <tr><td>Image features</td><td>54.41</td><td>82.06</td></tr>
+          <tr><td>+ depth-branch features</td><td>54.83</td><td>82.46</td></tr>
+          <tr><td>+ point cloud</td><td>55.32</td><td>82.87</td></tr>
+          <tr><td>+ vertical relative distance</td><td>56.68</td><td>83.32</td></tr>
+          <tr class="highlight"><td>+ floor and ceiling masks (full model)</td><td>56.80</td><td>83.45</td></tr>
+        </tbody>
+      </table></div>
+      <p>Removing depth entirely (the depth branch, the point cloud, and the distances) while keeping the split into two groups lowers fold-1 mIoU from 56.8 to 54.7, showing that the gains come from geometry and not only from the decomposition.</p>
+    </div></div></section>
+
+    <section id="limitations" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>6</span><p>Limitations</p></div><div class="paper-content">
+      <h2>Limitations and future work.</h2>
+      <ul>
+        <li><strong>Merging gaps:</strong> because the two groups are predicted separately, some areas can remain unlabelled after merging.</li>
+        <li><strong>Model cost:</strong> the depth branch adds considerable complexity compared with the baseline.</li>
+        <li><strong>Hard scenes:</strong> accuracy on Matterport3D remains limited for all methods; a deeper understanding of scene structure is the next step.</li>
+      </ul>
+    </div></div></section>
+
+    <section id="citation" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>7</span><p>Citation</p></div><div class="paper-content">
+      <h2>Citation</h2>
+<pre class="citation">@inproceedings{dinh2024geometric,
+  title     = {Geometric Exploitation for Indoor Panoramic Semantic Segmentation},
+  author    = {Dinh, Duc Cao and Kim, Seok Joon and Cho, Kyusung},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  volume    = {37},
+  year      = {2024},
+  doi       = {10.52202/079017-0830}
+}</pre>
+      <div class="project-links"><a class="button button-dark" href="paper.pdf" target="_blank" rel="noreferrer">Paper (PDF)</a><a class="button" href="https://github.com/caodinhduc/vertical_relative_distance" target="_blank" rel="noreferrer">Code</a><a class="button" href="../../index.html#publications">All publications</a></div>
+    </div></div></section>
   </main>
   <footer class="site-footer wrap"><span>© <span id="year"></span> Seok Joon Kim</span><a href="#top">Back to top</a></footer><script src="../../script.js"></script>
 </body>
