@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="AHEAD: Anticipatory Hand-Driven Teleoperation via Human Intent Prediction.">
+  <meta name="description" content="AHEAD: Anticipatory Hand-Driven Teleoperation via Human Intent Prediction. IEEE/RSJ IROS 2026.">
   <title>AHEAD — Seok Joon Kim</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&amp;display=swap" rel="stylesheet">
@@ -15,26 +15,108 @@
       <p class="eyebrow">IEEE/RSJ IROS 2026 · Teleoperation</p>
       <h1>AHEAD: Anticipatory Hand-Driven Teleoperation via Human Intent Prediction</h1>
       <div class="project-summary">
-        <p class="lead">Predicting intent from natural hand motion so a remote robot can begin moving before an explicit command arrives.</p>
-        <dl class="project-facts"><div><dt>Authors</dt><dd><strong>Seok Joon Kim</strong>, Joonho Lee, Federica Spinola, Taein Kwon, Mohsen Moghaddam</dd></div><div><dt>Topics</dt><dd>VR teleoperation, intent prediction, shared autonomy</dd></div><div><dt>Venue</dt><dd>IEEE/RSJ IROS 2026</dd></div></dl>
+        <p class="lead">A VR teleoperation system that predicts which object an operator will pick and where they will place it from natural hand motion, so the robot starts moving before any explicit command.</p>
+        <dl class="project-facts"><div><dt>Authors</dt><dd><strong>Seok Joon Kim</strong>, Joonho Lee, Federica Spinola, Taein Kwon, Mohsen Moghaddam</dd></div><div><dt>Topics</dt><dd>VR teleoperation, human intent prediction, shared autonomy</dd></div><div><dt>Venue</dt><dd>IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2026</dd></div></dl>
       </div>
+      <div class="project-links"><a class="button button-dark" href="paper.pdf" target="_blank" rel="noreferrer">Paper (PDF)</a><a class="button" href="#citation">Cite</a></div>
     </section>
 
-    <section class="project-body"><div class="wrap project-body-grid"><div><p class="eyebrow">The research</p></div><div class="project-body-text">
-      <h2>Reducing the wait between human intent and robot action.</h2>
-      <p class="lead">Direct teleoperation is precise but asks the operator to continuously correct the robot. Goal-based control reduces that burden, yet the robot normally waits for each explicit goal. AHEAD uses the operator’s ongoing movement as an early signal.</p>
-      <p>Within a mirrored VR workspace, the system processes a rolling window of tracked 3D hand joints, head pose, and scene geometry. Attention-based classifiers estimate which object the operator intends to grasp and which slot they intend to use. A state machine turns those predictions into stable preview and commit motions.</p>
-      <div class="key-results"><div class="key-result"><strong>76%</strong><span>Top-1 accuracy for both object and slot intent</span></div><div class="key-result"><strong>0.6 s</strong><span>reduction in object reaction time</span></div><div class="key-result"><strong>1.4 s</strong><span>reduction in slot reaction time</span></div></div>
-      <div class="contributions"><div class="contribution"><span>01</span><div><h3>Hand-driven intent prediction</h3><p>An attention-based model combines recent hand and head motion with compact geometric descriptions of scene entities.</p></div></div><div class="contribution"><span>02</span><div><h3>Preview-and-commit control</h3><p>The robot moves conservatively toward a likely goal, then commits only after the prediction becomes reliable.</p></div></div><div class="contribution"><span>03</span><div><h3>Human-subject evaluation</h3><p>A 15-participant study evaluates robot response time, intent accuracy, and perceived workload.</p></div></div></div>
+    <nav class="paper-toc" aria-label="Sections"><ol class="wrap">
+      <li><a href="#motivation">Motivation</a></li><li><a href="#system">System</a></li><li><a href="#intent">Intent prediction</a></li><li><a href="#control">Preview-and-commit control</a></li><li><a href="#evaluation">Evaluation</a></li><li><a href="#limitations">Limitations</a></li><li><a href="#citation">Citation</a></li>
+    </ol></nav>
+
+    <section id="motivation" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>1</span><p>Motivation</p></div><div class="paper-content">
+      <h2>Teleoperation forces a choice between effort and latency.</h2>
+      <p class="lead">Direct teleoperation maps the operator’s hand to the robot at every frame: precise, but the operator must constantly correct drift and overshoot. Goal-based teleoperation lets the operator pick a goal and the robot plan the motion, but the robot sits idle until each goal is explicitly specified.</p>
+      <p>AHEAD keeps the low effort of goal-based control and recovers responsiveness by treating the operator’s ongoing reach as an early signal of the next goal. We measure the benefit as <strong>robot reaction time</strong>: the delay between the start of the operator’s reach and the start of robot motion toward the correct target.</p>
+      <figure class="project-figure"><img src="images/overview.webp" alt="Real workspace, VR digital twin, and a timeline showing AHEAD predicting the object and slot before grasp and release" loading="lazy"><figcaption><strong>Figure 1.</strong> Top: the real UR10e workspace and its VR digital twin. Bottom: as the hand reaches toward an object and then a slot, AHEAD predicts both and starts the robot early; grasp and release are executed after the VR grasp and release events.</figcaption></figure>
+      <div class="key-results"><div class="key-result"><strong>76% / 76%</strong><span>Top-1 intent accuracy for grasp object / placement slot</span></div><div class="key-result"><strong>−0.6 s</strong><span>object reaction time vs. the best baseline (0.9 s vs. 1.5 s)</span></div><div class="key-result"><strong>−1.4 s</strong><span>slot reaction time vs. the best baseline (0.8 s vs. 2.2 s)</span></div></div>
     </div></div></section>
 
-    <section class="figure-section"><div class="wrap">
-      <div class="figure-section-header"><p class="eyebrow">Inside the paper</p><div><h2>From motion to proactive assistance</h2><p>The figures below show the complete loop: immersive task input, training data collection, and early robot motion.</p></div></div>
-      <figure class="project-figure"><img src="images/overview.webp" alt="AHEAD real workspace, VR digital twin, and anticipation timeline"><figcaption><strong>System overview.</strong> The operator reaches naturally in VR while AHEAD predicts the target object and placement slot. The physical robot begins approaching the predicted goal before grasp or release confirmation.</figcaption><div class="figure-analysis"><p>The intent model consumes a rolling 0.5-second window of 3D hand joints and head pose together with geometric scene entities. Objects are encoded as cuboids and placement slots as spheres, producing a compact representation for online attention-based classification. This coupling of motion history and scene context lets AHEAD infer a discrete goal before the hand reaches it, rather than simply selecting the nearest object.</p></div></figure>
-      <figure class="project-figure"><img src="images/data-collection.webp" alt="Eight stages of the AHEAD VR data collection procedure"><figcaption><strong>Data collection.</strong> Each demonstration covers approach, grasp, transport, placement, release, and confirmation, with synchronized hand, head, scene, and event data.</figcaption><div class="figure-analysis"><p>The training set contains 1,000 pick-and-place trajectories from five participants. Event annotations divide each trial into object-intent prediction before grasp and slot-intent prediction after grasp, allowing separate models to learn the different movement cues in reaching and placement. In offline evaluation, the selected model reached 76% Top-1 accuracy for both phases while identifying useful candidates earlier than proximity-based selection.</p></div></figure>
-      <figure class="project-figure"><img src="images/proactive-motion.webp" alt="AHEAD preview and commit motion sequence"><figcaption><strong>Preview and commit.</strong> AHEAD first approaches the neighborhood of a predicted object, refines its goal as the hand gets closer, and commits once confidence and proximity conditions are met.</figcaption><div class="figure-analysis"><p>A distance-gated state machine converts uncertain predictions into conservative robot motion: it previews a safe waypoint near likely candidates, narrows toward the leading goal, and commits only after the prediction stabilizes. In the 15-participant study, this reduced mean reaction time to 0.9 seconds for objects and 0.8 seconds for slots, versus 1.5 and 2.2 seconds for the nearest-object baseline, while all conditions retained 100% task completion.</p></div></figure>
-      <div class="project-actions"><a class="button button-dark" href="paper.pdf" target="_blank" rel="noreferrer">Read paper</a><a class="button" href="../../index.html#publications">All publications</a></div>
-    </div></section>
+    <section id="system" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>2</span><p>System</p></div><div class="paper-content">
+      <h2>A mirrored digital twin and an instance-agnostic scene.</h2>
+      <p>The operator wears a Meta Quest 3 and performs pick-and-place in a digital twin of the remote workspace. The robot base is calibrated with a ChArUco board, and object poses are tracked in real time with ArUco markers, keeping the virtual and physical scenes aligned.</p>
+      <figure class="project-figure narrow"><img src="images/digital-twin.webp" alt="Real workspace next to its VR digital twin" loading="lazy"><figcaption><strong>Real world and VR digital twin.</strong> Objects and slots in VR mirror the physical tabletop.</figcaption></figure>
+      <h3>Inputs</h3>
+      <ul>
+        <li><strong>Hand:</strong> 21 tracked 3D joints of the right hand (OpenXR skeleton without metacarpals).</li>
+        <li><strong>Head:</strong> head position and forward ray, used as a proxy for gaze (the headset has no eye tracking).</li>
+        <li><strong>Scene:</strong> up to 10 objects encoded as cuboids (centroid + 8 corners) and up to 10 slots encoded as spheres (centre + radius), so any object reduces to a bounding box without a mesh encoder.</li>
+      </ul>
+      <p>The model sees a sliding 0.5 s window (30 frames at 60 Hz), resampled to a fixed length. All quantities are expressed in a head-centric frame anchored at the start of the window, which emphasises hand-to-object geometry over absolute positions and helps transfer across layouts.</p>
+    </div></div></section>
+
+    <section id="intent" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>3</span><p>Intent prediction</p></div><div class="paper-content">
+      <h2>Phase-specific attention over hand motion and scene entities.</h2>
+      <h3>Dataset</h3>
+      <p>Five participants each completed 40 randomised scenes with 5 trials per scene, giving 1,000 pick-and-place trajectories with synchronised hand, head, scene, and event data (grasp, slot entry, release). Each scene contains 5–10 objects and 5–10 slots with randomised sizes and positions.</p>
+      <figure class="project-figure"><img src="images/data-collection.webp" alt="Eight stages of the VR data collection procedure" loading="lazy"><figcaption><strong>Figure 2.</strong> Data collection: a left-hand pinch starts recording; the right hand approaches, grasps, transports, places, and releases the cued object; the operator then confirms or redoes the trial.</figcaption></figure>
+      <h3>Model</h3>
+      <p>A graph attention network (GATv2) encodes each frame of the hand skeleton; the per-frame embeddings are fused with head features and passed through temporal self-attention. Scene entities are embedded by an MLP, and entity tokens cross-attend to the hand sequence, producing one logit per candidate. Intent is a masked classification over at most 10 candidates.</p>
+      <p>Two models share this architecture: an object model before the grasp and a slot model after it, switched by the VR grasp event. Decoupling them outperformed a single multi-task model, since reaching and transport have different motion patterns. Exported to ONNX, each forward pass takes about 2.6 ms.</p>
+      <figure class="project-figure"><img src="images/architecture.webp" alt="Intent model architecture: hand encoder, object or slot encoder, cross-attention fusion, and prediction head" loading="lazy"><figcaption><strong>Figure 3.</strong> Hand-head features (A) are fused with object (B) or slot (C) embeddings by cross-attention (D), and the prediction head (E) outputs a distribution over candidates.</figcaption></figure>
+    </div></div></section>
+
+    <section id="control" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>4</span><p>Control</p></div><div class="paper-content">
+      <h2>Turning noisy predictions into stable robot motion.</h2>
+      <p>Acting on the raw per-frame prediction would make the robot jitter between candidates. Because prediction reliability grows as the hand approaches its target, AHEAD gates robot behaviour on hand-to-target distance, using two thresholds measured on validation data:</p>
+      <ul>
+        <li><strong>Preview:</strong> once the hand is within the distance where Top-3 accuracy exceeds 80%, the robot moves to a hover point above the centre of the three most likely nearby candidates.</li>
+        <li><strong>Commit:</strong> once within the distance where Top-1 accuracy exceeds 80%, the robot commits to the single predicted target and latches it, with hysteresis against switching.</li>
+      </ul>
+      <figure class="project-figure narrow"><img src="images/controller.webp" alt="Distance-gated controller with neighbour-reliable and identity-reliable regions" loading="lazy"><figcaption><strong>Figure 4.</strong> Distance-gated policy: the robot previews above the candidate neighbourhood (red) and commits to the Top-1 object (green) when the hand enters the identity-reliable region.</figcaption></figure>
+      <figure class="project-figure"><img src="images/proactive-motion.webp" alt="Sequence of VR interaction and real robot motion from motion initiation to commit and grasp" loading="lazy"><figcaption><strong>Figure 5.</strong> Pre-grasp sequence in VR (top) and on the real robot (bottom): motion initiation, approach, preview, then commit and grasp.</figcaption></figure>
+    </div></div></section>
+
+    <section id="evaluation" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>5</span><p>Evaluation</p></div><div class="paper-content">
+      <h2>Earlier, more reliable predictions and faster robot response.</h2>
+      <h3>Offline intent prediction</h3>
+      <p>Evaluated with leave-one-subject-out cross-validation against a nearest-candidate heuristic. The learned model is both more accurate and reliable earlier: it reaches 80% Top-3 accuracy 0.36 m (objects) and 0.28 m (slots) farther from the target.</p>
+      <div class="table-wrap"><table class="result-table">
+        <caption><strong>Table 1.</strong> Offline intent evaluation (excerpt). Acc: Top-1 / Top-3. T3 Cross: time and distance before the event at which Top-3 accuracy exceeds 0.8.</caption>
+        <thead><tr><th>Method</th><th>Object Acc</th><th>Object T3 Cross</th><th>Slot Acc</th><th>Slot T3 Cross</th></tr></thead>
+        <tbody>
+          <tr><td>Nearest</td><td>0.52 / 0.70</td><td>0.49 s / 0.26 m</td><td>0.63 / 0.74</td><td>1.12 s / 0.40 m</td></tr>
+          <tr><td>Unified (single model)</td><td>0.75 / 0.88</td><td>0.98 s / 0.54 m</td><td>0.75 / 0.90</td><td>1.58 s / 0.65 m</td></tr>
+          <tr class="highlight"><td>AHEAD (decoupled)</td><td>0.76 / 0.90</td><td>1.04 s / 0.62 m</td><td>0.76 / 0.91</td><td>1.62 s / 0.68 m</td></tr>
+        </tbody>
+      </table></div>
+      <h3>User study</h3>
+      <p>Fifteen participants moved six objects into six slots on the real UR10e under four interfaces, in counterbalanced order and with a scene layout not seen during training. UI uses explicit menus; Dwell selects after a 1 s dwell; Nearest picks the closest object; AHEAD uses the same flow as Nearest but predicts intent.</p>
+      <figure class="project-figure"><img src="images/conditions.webp" alt="UI-based and hand-based teleoperation conditions" loading="lazy"><figcaption><strong>Figure 6.</strong> UI-based control requires explicit object and slot selection (top); the hand-based conditions command the robot through natural approach, grasp, transport, and release (bottom).</figcaption></figure>
+      <div class="table-wrap"><table class="result-table">
+        <caption><strong>Table 2.</strong> User study, mean over 15 participants. Ratings on a 0–10 scale; reaction time in seconds.</caption>
+        <thead><tr><th>Measure</th><th>UI</th><th>Dwell</th><th>Nearest</th><th>AHEAD</th></tr></thead>
+        <tbody>
+          <tr class="highlight"><td>Reaction time, object (s) ↓</td><td>3.7</td><td>3.0</td><td>1.5</td><td>0.9</td></tr>
+          <tr class="highlight"><td>Reaction time, slot (s) ↓</td><td>4.5</td><td>2.3</td><td>2.2</td><td>0.8</td></tr>
+          <tr><td>Naturalness ↑</td><td>4.2</td><td>5.1</td><td>7.8</td><td>8.6</td></tr>
+          <tr><td>Efficiency ↑</td><td>4.7</td><td>5.2</td><td>7.7</td><td>8.1</td></tr>
+          <tr><td>Trust ↑</td><td>6.5</td><td>5.9</td><td>7.7</td><td>7.9</td></tr>
+        </tbody>
+      </table></div>
+      <p>All conditions reached 100% task completion, so the key difference is responsiveness: AHEAD had the shortest reaction times, and occasional prediction errors did not prevent task completion. NASA-TLX mental and physical demand were lowest for AHEAD, and effort was significantly lower than with Dwell.</p>
+    </div></div></section>
+
+    <section id="limitations" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>6</span><p>Limitations</p></div><div class="paper-content">
+      <h2>Limitations and future work.</h2>
+      <ul>
+        <li><strong>Marker-based tracking:</strong> object poses come from ArUco markers; markerless pose estimation would remove this deployment constraint.</li>
+        <li><strong>Dataset scale:</strong> 1,000 trajectories from five people limit how far cross-user and cross-layout generalisation can be characterised.</li>
+        <li><strong>Target identity only:</strong> AHEAD predicts which object and slot, not approach direction, so orientation-aware grasping is future work.</li>
+      </ul>
+    </div></div></section>
+
+    <section id="citation" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>7</span><p>Citation</p></div><div class="paper-content">
+      <h2>Citation</h2>
+<pre class="citation">@inproceedings{kim2026ahead,
+  title     = {{AHEAD}: Anticipatory Hand-Driven Teleoperation via Human Intent Prediction},
+  author    = {Kim, Seok Joon and Lee, Joonho and Spinola, Federica and Kwon, Taein and Moghaddam, Mohsen},
+  booktitle = {IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+  year      = {2026}
+}</pre>
+      <div class="project-links"><a class="button button-dark" href="paper.pdf" target="_blank" rel="noreferrer">Paper (PDF)</a><a class="button" href="../../index.html#publications">All publications</a></div>
+    </div></div></section>
   </main>
   <footer class="site-footer wrap"><span>© <span id="year"></span> Seok Joon Kim</span><a href="#top">Back to top</a></footer><script src="../../script.js"></script>
 </body>

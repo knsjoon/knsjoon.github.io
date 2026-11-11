@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="RoomRecon: High-Quality Textured Room Layout Reconstruction on Mobile Devices.">
+  <meta name="description" content="RoomRecon: High-Quality Textured Room Layout Reconstruction on Mobile Devices. IEEE ISMAR 2024, Best Paper Nominee.">
   <title>RoomRecon — Seok Joon Kim</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="../../styles.css">
@@ -10,22 +10,130 @@
 <body class="project-page">
   <header class="site-header"><a class="wordmark" href="../../index.html">Seok Joon Kim</a><button class="menu-button" aria-expanded="false" aria-controls="site-nav">Menu</button><nav id="site-nav" class="site-nav" aria-label="Primary navigation"><a href="../../index.html#about">About</a><a href="../../index.html#experience">Experience</a><a href="../../awards/">Awards</a><a href="../../index.html#publications">Publications</a><a href="../../Curriculum_Vitae_Robotics_2024.pdf" target="_blank" rel="noreferrer">CV</a></nav></header>
   <main id="top">
-    <section class="project-hero wrap"><p class="eyebrow">IEEE ISMAR 2024 · Best Paper Nominee</p><h1>RoomRecon: High-Quality Textured Room Layout Reconstruction on Mobile Devices</h1><div class="project-summary"><p class="lead">An interactive mobile pipeline for creating complete, editable, and realistic 3D replicas of indoor spaces.</p><dl class="project-facts"><div><dt>Authors</dt><dd><strong>Seok Joon Kim</strong>, Dinh Duc Cao, Federica Spinola, Se Jin Lee, Kyu Sung Cho</dd></div><div><dt>Topics</dt><dd>Mobile AR, RGB-D, 3D reconstruction, texturing</dd></div><div><dt>DOI</dt><dd>10.1109/ISMAR62088.2024.00069</dd></div></dl></div></section>
+    <section class="project-hero wrap">
+      <p class="eyebrow">IEEE ISMAR 2024 · Best Paper Nominee</p>
+      <h1>RoomRecon: High-Quality Textured Room Layout Reconstruction on Mobile Devices</h1>
+      <div class="project-summary">
+        <p class="lead">An interactive mobile pipeline that reconstructs a room’s permanent structure (walls, floor, and ceiling) and textures it from a few AR-guided photos, producing complete, editable 3D replicas for VR and AR.</p>
+        <dl class="project-facts"><div><dt>Authors</dt><dd><strong>Seok Joon Kim</strong>, Dinh Duc Cao, Federica Spinola, Se Jin Lee, Kyu Sung Cho</dd></div><div><dt>Topics</dt><dd>Mobile AR, RGB-D reconstruction, room layout, texturing, inpainting</dd></div><div><dt>Venue</dt><dd>IEEE International Symposium on Mixed and Augmented Reality (ISMAR), 2024</dd></div><div><dt>DOI</dt><dd><a class="affiliation-link" href="https://doi.org/10.1109/ISMAR62088.2024.00069" target="_blank" rel="noreferrer">10.1109/ISMAR62088.2024.00069</a></dd></div></dl>
+      </div>
+      <div class="project-links"><a class="button button-dark" href="paper.pdf" target="_blank" rel="noreferrer">Paper (PDF)</a><a class="button" href="https://doi.org/10.1109/ISMAR62088.2024.00069" target="_blank" rel="noreferrer">DOI</a><a class="button" href="#citation">Cite</a></div>
+    </section>
 
-    <section class="project-body"><div class="wrap project-body-grid"><div><p class="eyebrow">The research</p></div><div class="project-body-text">
-      <h2>Room-scale reconstruction designed around mobile capture.</h2>
-      <p class="lead">RoomRecon reconstructs permanent room elements—walls, floors, and ceilings—then uses guided image capture and generative refinement to produce high-quality textures.</p>
-      <p>The system focuses on durable room layout rather than temporary furniture, making the result easier to edit and reuse. It addresses common mobile-capture problems including occlusion, camera drift, blur, lighting inconsistency, and incomplete textures.</p>
-      <div class="contributions"><div class="contribution"><span>01</span><div><h3>Interactive mobile framework</h3><p>A real-time scanning and texturing pipeline produces complete room-layout models on mobile hardware.</p></div></div><div class="contribution"><span>02</span><div><h3>AR-guided image capture</h3><p>A divide-and-conquer strategy guides users toward a small set of sharp, useful texture images.</p></div></div><div class="contribution"><span>03</span><div><h3>Plane2Image refinement</h3><p>Textured planes become editable 2D images, enabling conventional processing and diffusion-based inpainting.</p></div></div></div>
+    <nav class="paper-toc" aria-label="Sections"><ol class="wrap">
+      <li><a href="#motivation">Motivation</a></li><li><a href="#pipeline">Pipeline</a></li><li><a href="#geometry">Layout &amp; mesh</a></li><li><a href="#capture">AR-guided capture</a></li><li><a href="#refinement">Plane2Image &amp; refinement</a></li><li><a href="#results">Results</a></li><li><a href="#limitations">Limitations</a></li><li><a href="#citation">Citation</a></li>
+    </ol></nav>
+
+    <section id="motivation" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>1</span><p>Motivation</p></div><div class="paper-content">
+      <h2>Scanned rooms are static, unstructured, and poorly textured.</h2>
+      <p class="lead">Phones with depth sensors can scan a room, but the result bakes in every piece of furniture, has no notion of what is a wall and what is a chair, and is textured from hundreds of blurry video frames.</p>
+      <p>Moving a sofa means rescanning. And state-of-the-art assignment-based texturing (MVSTex, SeamlessTex) suffers from defects that stem from the capture itself: camera-pose drift and incomplete meshes misplace textures, multiple images per wall create seams, furniture leaves untextured holes, and reflective or transparent surfaces look inconsistent.</p>
+      <figure class="project-figure"><img src="images/texture-problems.webp" alt="Texturing defects A to H across six walls, the floor, and the ceiling of a scanned room" loading="lazy"><figcaption><strong>Texturing defects in a conventionally textured room.</strong> A: geometry and camera misalignment; B: seams from pose drift; C: uncaptured areas; D: occlusion by furniture; E: object shadows; F: thin objects missing from the mesh; G, H: reflective and transparent surfaces. Floors and ceilings are hit hardest.</figcaption></figure>
+      <p>RoomRecon addresses both problems: it models only the permanent room layout, so the model stays valid when furniture changes, and it controls texture quality at the source by guiding the user to capture a few deliberate, sharp images.</p>
+      <div class="key-results"><div class="key-result"><strong>+18.1%</strong><span>PSNR on whole walls vs. SeamlessTex (SSIM +13.6%, ST-LPIPS −44.4%)</span></div><div class="key-result"><strong>11 vs. 259</strong><span>images needed to texture a room (AR-guided vs. sampled scan frames)</span></div><div class="key-result"><strong>9.5 s</strong><span>full on-device pipeline on iPhone, 3× faster than with standard MVSTex</span></div></div>
     </div></div></section>
 
-    <section class="figure-section"><div class="wrap">
-      <div class="figure-section-header"><p class="eyebrow">Inside the paper</p><div><h2>A two-phase path from scan to textured room</h2><p>The workflow separates geometric reconstruction from deliberate, high-quality texture acquisition and refinement.</p></div></div>
-      <figure class="project-figure"><img src="images/overview.webp" alt="RoomRecon input room, layout model, and textured result"><figcaption><strong>From room to replica.</strong> Mobile capture produces a simplified room layout that RoomRecon turns into a textured, reusable 3D environment.</figcaption><div class="figure-analysis"><p>RoomRecon reconstructs the permanent architectural envelope—walls, floor, and ceiling—instead of baking transient furniture into the mesh. The resulting model is compact, editable, and better suited to reusable digital-twin and extended-reality applications. Layout parsing, loop checking, mesh filtering, remeshing, and plane extraction run directly on mobile hardware.</p></div></figure>
-      <figure class="project-figure"><img src="images/pipeline.webp" alt="RoomRecon two-phase reconstruction and texturing pipeline"><figcaption><strong>Method pipeline.</strong> Phase one captures RGB-D geometry, filters and combines meshes, and acquires deliberate texture images. Phase two textures each plane, converts it to image space, and repairs incomplete regions.</figcaption><div class="figure-analysis"><p>Depth and tracked camera poses establish the room layout, after which AR guidance divides each surface into capture regions and prompts the user to acquire a small set of sharp RGB views. Plane2Image renders each textured 3D plane into a 2D image, where masks, seam correction, conventional image processing, and diffusion-based inpainting can repair occlusions or missing texture before the result is projected back onto the model.</p></div></figure>
-      <figure class="project-figure"><img src="images/results.webp" alt="RoomRecon reconstructed layouts and final textured room results"><figcaption><strong>Results across spaces.</strong> The same pipeline is applied to open and closed layouts, producing textured models of offices, meeting rooms, a testing room, and a living room.</figcaption><div class="figure-analysis"><p>Across rooms with varied topology, materials, and occlusion, deliberately recaptured images improve texture quality over using the original scan stream: compared with the SeamlessTex baseline, the enhanced pipeline reports gains of 18.1% in PSNR and 13.6% in SSIM, with a 44.4% reduction in ST-LPIPS. The divide-and-conquer capture strategy also reduces the average image set from about 259 frames to 11 and completes texturing in 4.72 seconds on an iOS device.</p></div></figure>
-      <div class="project-actions"><a class="button button-dark" href="paper.pdf" target="_blank" rel="noreferrer">Read paper</a><a class="button" href="https://doi.org/10.1109/ISMAR62088.2024.00069" target="_blank" rel="noreferrer">DOI</a><a class="button" href="../../index.html#publications">All publications</a></div>
-    </div></section>
+    <section id="pipeline" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>2</span><p>Pipeline</p></div><div class="paper-content">
+      <h2>Two phases: reconstruct the layout, then texture it deliberately.</h2>
+      <figure class="project-figure"><img src="images/overview.webp" alt="A phone scanning a room, the room layout model, and the textured RoomRecon result" loading="lazy"><figcaption><strong>Figure 1.</strong> From a mobile scan to a textured room-layout model ready for VR and AR.</figcaption></figure>
+      <p><strong>Phase 1</strong> scans the room with an RGB-D phone (an iPhone with ARKit), builds a mesh on the fly, estimates the room layout, filters and combines the meshes, and then guides the user to recapture a small set of texture images. <strong>Phase 2</strong> textures the combined mesh with those images, renders every textured plane into a 2D image (Plane2Image), and refines the images before mapping them back onto the model.</p>
+      <figure class="project-figure"><img src="images/pipeline.webp" alt="RoomRecon two-phase pipeline: capturing, mesh processing, texture image acquisition, texturing, Plane2Image, post-texturing" loading="lazy"><figcaption><strong>Figure 2.</strong> Method overview. Phase 1: capturing, mesh processing, and texture image acquisition. Phase 2: texturing, Plane2Image, and post-texturing.</figcaption></figure>
+    </div></div></section>
+
+    <section id="geometry" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>3</span><p>Layout &amp; mesh</p></div><div class="paper-content">
+      <h2>Separating the room from its contents.</h2>
+      <p>The scan mesh is fused on device from ARKit depth and poses (KinectFusion-style, 20 mm voxels), with a UI that shows scanned and unscanned areas so the mesh is complete. A room layout gives wall planes, corners, and floor and ceiling heights.</p>
+      <ul>
+        <li><strong>Filtering:</strong> mesh faces outside the wall loop are removed, as are faces within 5 cm of a wall or within 10 cm and parallel to it. What remains is the furniture, still needed for occlusion tests during texturing.</li>
+        <li><strong>Remeshing:</strong> walls, floor, and ceiling are remeshed with constrained Delaunay triangulation and merged with the filtered mesh, with every segment labelled as wall, floor, ceiling, or object.</li>
+      </ul>
+      <div class="figure-grid figure-grid-4">
+        <figure class="project-figure"><img src="images/mesh-original.webp" alt="Original scanned mesh" loading="lazy"><figcaption><strong>Scan mesh</strong></figcaption></figure>
+        <figure class="project-figure"><img src="images/mesh-layout.webp" alt="Estimated room layout" loading="lazy"><figcaption><strong>Room layout</strong></figcaption></figure>
+        <figure class="project-figure"><img src="images/mesh-filtered.webp" alt="Mesh filtered against the layout" loading="lazy"><figcaption><strong>Filtered mesh</strong></figcaption></figure>
+        <figure class="project-figure"><img src="images/mesh-combined.webp" alt="Remeshed layout combined with the filtered mesh, wireframe" loading="lazy"><figcaption><strong>Combined mesh</strong></figcaption></figure>
+      </div>
+    </div></div></section>
+
+    <section id="capture" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>4</span><p>AR-guided capture</p></div><div class="paper-content">
+      <h2>Divide and conquer: one sharp photo per wall section.</h2>
+      <p>Texture quality depends most on the input images. Texturing a wall from a single image avoids seams and misalignment, so RoomRecon asks the user for a few deliberate photos instead of reusing the scan stream.</p>
+      <ul>
+        <li><strong>Divide:</strong> from the camera’s field of view, compute the distance at which one portrait photo covers a wall, placing the camera at about mid-wall height (1.22 m). If that position is too far away or outside the room, the wall is split recursively into sub-planes until each can be covered from a valid position.</li>
+        <li><strong>Conquer:</strong> AR cues (the target plane highlighted in red, an arrow, a virtual phone at the optimal pose, and a haptic proximity alert) guide the user to each capture position. Captured sections turn back to their natural colour.</li>
+      </ul>
+      <p>These recaptured images are 39% sharper than the raw scan frames and 34% sharper than the sharpest sampled frames used by prior methods.</p>
+      <h3>Texturing</h3>
+      <p>The combined mesh is textured with existing assignment-based methods (MVSTex, SeamlessTex), fed with the recaptured images. A per-face occlusion test rejects images whose view of a face is blocked by other geometry.</p>
+      <figure class="project-figure narrow small"><img src="images/occlusion-test.webp" alt="Occlusion test between a camera and a mesh face" loading="lazy"><figcaption><strong>Occlusion test.</strong> An image is a texture candidate for a face only if the rays from the face’s vertices to the camera centre are unobstructed.</figcaption></figure>
+    </div></div></section>
+
+    <section id="refinement" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>5</span><p>Refinement</p></div><div class="paper-content">
+      <h2>Plane2Image: editing 3D textures as ordinary images.</h2>
+      <p>Each textured plane is rendered by a virtual camera into a 2D image (500 px per metre), and the plane is simplified back to two triangles mapped onto that image. Every wall, floor, and ceiling now corresponds to exactly one image, so improving a texture means editing or replacing an image.</p>
+      <h3>ImageMode: inpainting and generative edits</h3>
+      <p>Holes left by furniture are filled with ZIT inpainting, chosen for its trade-off between quality and speed and for restoring the straight edges common indoors (doors, windows, frames). Text-guided diffusion (PowerPaint, server-side) can also add new content.</p>
+      <div class="figure-grid">
+        <figure class="project-figure"><img src="images/inpainting.webp" alt="Wall images before and after inpainting of occluded regions" loading="lazy"><figcaption><strong>Inpainting.</strong> Red regions are untextured because of furniture; ZIT fills them consistently.</figcaption></figure>
+        <figure class="project-figure"><img src="images/diffusion-edit.webp" alt="Text-guided diffusion edits on wall images" loading="lazy"><figcaption><strong>Generative edits.</strong> Masked regions replaced from text prompts: “a painting … of a city at night in the style of Van Gogh” and “a flying balloon”.</figcaption></figure>
+      </div>
+      <h3>SampleMode: floors and ceilings</h3>
+      <p>Repeating floor and ceiling patterns are especially sensitive to pose drift. Instead of stitching them from photos, the user captures (or picks) one sample and tiles it with adjustable width, height, offset, and angle.</p>
+      <figure class="project-figure narrow"><img src="images/sample-mode.webp" alt="SampleMode parameters: sample width, height, offset and angle" loading="lazy"><figcaption><strong>SampleMode parameters</strong> for tiling a captured floor or ceiling sample across the plane.</figcaption></figure>
+    </div></div></section>
+
+    <section id="results" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>6</span><p>Results</p></div><div class="paper-content">
+      <h2>Better textures from fewer images, in less time.</h2>
+      <p>Evaluated on 13 rooms (7 office and 6 household) captured with an iPhone 12 Pro. All six texturing methods run inside the same RoomRecon pipeline; ours differ only in using the AR-recaptured images. Whole-wall renders are compared against manually rectified, furniture-free ground-truth photos.</p>
+      <div class="table-wrap"><table class="result-table">
+        <caption><strong>Table 1.</strong> Global plane-to-plane texture quality on vertical walls (before inpainting).</caption>
+        <thead><tr><th>Method</th><th>PSNR (dB) ↑</th><th>SSIM ↑</th><th>ST-LPIPS ↓</th><th>Blurriness ↓</th></tr></thead>
+        <tbody>
+          <tr><td>ColorMapOpt</td><td>16.09</td><td>0.77</td><td>0.25</td><td>0.44</td></tr>
+          <tr><td>PlaneOpt</td><td>16.49</td><td>0.77</td><td>0.25</td><td>0.41</td></tr>
+          <tr><td>MVSTex</td><td>17.09</td><td>0.80</td><td>0.19</td><td>0.33</td></tr>
+          <tr><td>SeamlessTex</td><td>17.61</td><td>0.81</td><td>0.18</td><td>0.34</td></tr>
+          <tr class="highlight"><td>Ours (MVSTex)</td><td>20.35</td><td>0.91</td><td>0.11</td><td>0.29</td></tr>
+          <tr class="highlight"><td>Ours (SeamlessTex)</td><td>20.80</td><td>0.92</td><td>0.10</td><td>0.29</td></tr>
+        </tbody>
+      </table></div>
+      <p>Both of our variants score almost identically, regardless of the underlying texturing algorithm: a few high-quality inputs matter more than a sophisticated texturing method. In a local evaluation on small detailed regions, where every method tends to use a single image anyway, our variants match the best baselines on PSNR and SSIM and produce sharper textures (blurriness 0.20 vs. 0.22–0.25).</p>
+      <div class="table-wrap"><table class="result-table">
+        <caption><strong>Table 2.</strong> Texturing time on a desktop CPU, and the full on-device pipeline on iPhone.</caption>
+        <thead><tr><th>Method</th><th>Images used</th><th>Texturing (s)</th><th>Full pipeline on iPhone (s)</th></tr></thead>
+        <tbody>
+          <tr><td>MVSTex</td><td>259 (sampled)</td><td>8.48</td><td>28.33</td></tr>
+          <tr><td>SeamlessTex</td><td>259 (sampled)</td><td>32.62</td><td>–</td></tr>
+          <tr class="highlight"><td>Ours (MVSTex)</td><td>11 (recaptured)</td><td>3.23</td><td>9.48</td></tr>
+          <tr class="highlight"><td>Ours (SeamlessTex)</td><td>11 (recaptured)</td><td>4.44</td><td>–</td></tr>
+        </tbody>
+      </table></div>
+      <p>The timing excludes the extra capture pass, which depends on the user’s familiarity with the app. In a perceptual study, 30 participants chose the best of four textured versions for 20 walls; our two variants received 520 of 600 votes.</p>
+      <figure class="project-figure"><img src="images/results.webp" alt="Room layouts and final textured rooms with floor and ceiling samples" loading="lazy"><figcaption><strong>Figure 9.</strong> Textured room layouts after the full pipeline, with the ceiling (dashed) and floor (solid) samples used for SampleMode.</figcaption></figure>
+      <figure class="project-figure"><img src="images/gallery.webp" alt="Additional textured rooms shown from two viewpoints with their floor and ceiling samples" loading="lazy"><figcaption><strong>More rooms.</strong> Layouts, two views of each textured room, and the floor and ceiling samples used.</figcaption></figure>
+    </div></div></section>
+
+    <section id="limitations" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>7</span><p>Limitations</p></div><div class="paper-content">
+      <h2>Limitations and future work.</h2>
+      <ul>
+        <li><strong>Narrow spaces:</strong> in corridors the divide step may find no valid capture position inside the room.</li>
+        <li><strong>Interaction design:</strong> the capture UI is one possible design; user interaction time and a thorough usability study across user groups remain future work.</li>
+        <li><strong>Beyond one room:</strong> rooms reconstructed in a shared coordinate frame already combine into whole floors, and input from real-estate and interior-design experts could shape the next version.</li>
+      </ul>
+      <figure class="project-figure narrow"><img src="images/multi-room.webp" alt="Several reconstructed rooms combined into a multi-room floor" loading="lazy"><figcaption><strong>Multi-room extension.</strong> Rooms reconstructed one by one in a shared world frame form a complete floor.</figcaption></figure>
+    </div></div></section>
+
+    <section id="citation" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>8</span><p>Citation</p></div><div class="paper-content">
+      <h2>Citation</h2>
+<pre class="citation">@inproceedings{kim2024roomrecon,
+  title     = {{RoomRecon}: High-Quality Textured Room Layout Reconstruction on Mobile Devices},
+  author    = {Kim, Seok Joon and Cao, Dinh Duc and Spinola, Federica and Lee, Se Jin and Cho, Kyu Sung},
+  booktitle = {IEEE International Symposium on Mixed and Augmented Reality (ISMAR)},
+  year      = {2024},
+  doi       = {10.1109/ISMAR62088.2024.00069}
+}</pre>
+      <div class="project-links"><a class="button button-dark" href="paper.pdf" target="_blank" rel="noreferrer">Paper (PDF)</a><a class="button" href="https://doi.org/10.1109/ISMAR62088.2024.00069" target="_blank" rel="noreferrer">DOI</a><a class="button" href="../../index.html#publications">All publications</a></div>
+    </div></div></section>
   </main>
   <footer class="site-footer wrap"><span>© <span id="year"></span> Seok Joon Kim</span><a href="#top">Back to top</a></footer><script src="../../script.js"></script>
 </body>

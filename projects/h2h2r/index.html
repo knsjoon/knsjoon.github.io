@@ -2,30 +2,121 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="From Human–Human Collaboration to Robot Assistance in Collaborative Assembly. Under review.">
-  <title>From Human–Human Collaboration to Robot Assistance — Seok Joon Kim</title>
+  <meta name="description" content="From Human–Human Collaboration to Robot Assistance in Collaborative Assembly (H2H2R). Under review.">
+  <title>H2H2R: From Human–Human Collaboration to Robot Assistance — Seok Joon Kim</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="../../styles.css">
 </head>
 <body class="project-page">
   <header class="site-header"><a class="wordmark" href="../../index.html">Seok Joon Kim</a><button class="menu-button" aria-expanded="false" aria-controls="site-nav">Menu</button><nav id="site-nav" class="site-nav" aria-label="Primary navigation"><a href="../../index.html#about">About</a><a href="../../index.html#experience">Experience</a><a href="../../awards/">Awards</a><a href="../../index.html#publications">Publications</a><a href="../../Curriculum_Vitae_Robotics_2024.pdf" target="_blank" rel="noreferrer">CV</a></nav></header>
   <main id="top">
-    <section class="project-hero wrap"><p class="eyebrow">ICRA 2027 <span class="project-status">Under review</span></p><h1>From Human–Human Collaboration to Robot Assistance in Collaborative Assembly</h1><div class="project-summary"><p class="lead">Using observed human teamwork to identify and integrate useful robot-assistance capabilities for assembly.</p><dl class="project-facts"><div><dt>Authors</dt><dd>Anonymous during review</dd></div><div><dt>Topics</dt><dd>Human–robot collaboration, AR, coassembly</dd></div><div><dt>Status</dt><dd>Under review for ICRA 2027</dd></div></dl></div></section>
+    <section class="project-hero wrap">
+      <p class="eyebrow">ICRA 2027 <span class="project-status">Under review</span></p>
+      <h1>From Human–Human Collaboration to Robot Assistance in Collaborative Assembly</h1>
+      <div class="project-summary">
+        <p class="lead">Which capabilities should a robot assistant have? H2H2R answers this empirically: it analyses how people help each other assemble a gearbox, derives design requirements, and builds them into an AR-mediated robot coassembly system.</p>
+        <dl class="project-facts"><div><dt>Authors</dt><dd>Anonymous during review</dd></div><div><dt>Topics</dt><dd>Human–robot collaboration, augmented reality, language grounding, coassembly</dd></div><div><dt>Status</dt><dd>Under review for ICRA 2027</dd></div></dl>
+      </div>
+      <div class="project-links"><a class="button button-dark" href="paper.pdf" target="_blank" rel="noreferrer">Manuscript (PDF)</a></div>
+    </section>
 
-    <section class="project-body"><div class="wrap project-body-grid"><div><p class="eyebrow">Overview</p></div><div class="project-body-text">
-      <h2>Designing robot assistance from human collaboration.</h2>
-      <p class="lead">The work studies how people ask for and provide help during gearbox assembly, then translates those patterns into an integrated robot coassembly system.</p>
-      <p>H2H2R combines part and tool retrieval, handover, workholding, progress-aware guidance, and flexible spoken part references within an augmented-reality interface. The components are evaluated through a language-grounding benchmark and controlled studies of workholding and part acquisition.</p>
-      <div class="project-note"><p><strong>Review note.</strong> This paper is currently under review. The page intentionally provides only a concise system overview and selected figures.</p></div>
+    <nav class="paper-toc" aria-label="Sections"><ol class="wrap">
+      <li><a href="#motivation">Motivation</a></li><li><a href="#h2h">Human–human analysis</a></li><li><a href="#system">H2H2R system</a></li><li><a href="#evaluation">Evaluation</a></li><li><a href="#future">Future work</a></li>
+    </ol></nav>
+
+    <section id="motivation" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>1</span><p>Motivation</p></div><div class="paper-content">
+      <h2>The building blocks exist; which ones does a task need?</h2>
+      <p class="lead">Robots can fetch, hand over, and hold parts; language models can interpret free-form requests; AR can show task state in place. Having these capabilities does not tell us which to combine for a shared physical task, or when each is needed.</p>
+      <p>We ask whether observing human–human (H2H) collaboration can supply that evidence. We analyse an existing gearbox coassembly dataset, translate the recurring assistance patterns into design requirements, and realise them in H2H2R, a human–robot (H2R) coassembly system with a UR10e arm, a pegboard of parts and tools, and a Meta Quest 3 AR interface.</p>
+      <figure class="project-figure"><img src="images/fig-setup.webp" alt="Exocentric and egocentric views of the H2H2R setup, with progress-aware part requests" loading="lazy"><figcaption><strong>Figure 1.</strong> Top: the user, robot, assembly board, and pegboard (exocentric) and the AR view with workspace bounds, part and tool boxes, and the AR Gearbox (egocentric). Bottom: progress-aware assistance answers “What parts do I need?” and resolves “Can you hand me the gear rod?”.</figcaption></figure>
     </div></div></section>
 
-    <section class="figure-section"><div class="wrap">
-      <div class="figure-section-header"><p class="eyebrow">Selected figures</p><div><h2>From observed teamwork to an AR-mediated robot system</h2><p>These figures provide a limited view of the study setting, the H2H evidence, and the implemented interaction flow.</p></div></div>
-      <figure class="project-figure"><img src="images/system-overview.webp" alt="H2H2R robot, assembly station, and augmented reality interface"><figcaption><strong>System setting.</strong> A robot, component board, assembly workspace, and head-worn AR interface support progress-aware questions and part requests.</figcaption><div class="figure-analysis"><p>Registered AR regions connect the physical inventory and gearbox workspace to a shared assembly state. That representation tracks the current step, relevant parts, and prior selections, allowing a spoken request to be interpreted in context rather than as an isolated command. The same state drives visual guidance and robot behaviors for retrieval, handover, and workholding.</p></div></figure>
-      <figure class="project-figure"><img src="images/human-collaboration.webp" alt="Human coassembly behaviors and analysis charts"><figcaption><strong>Human–human evidence.</strong> Observed help includes handover, workholding, part search, task decisions, and natural references to component shape, size, and location.</figcaption><div class="figure-analysis"><p>The system requirements come from observing how people actually assist one another during gearbox assembly: collaborators provide physical support, monitor progress, and resolve references using attributes such as location, size, and shape. These observations motivate an assistance architecture that combines manipulation skills with task awareness and flexible language grounding instead of assuming every request is fully specified.</p></div></figure>
-      <figure class="project-figure"><img src="images/assistance-system.webp" alt="H2H2R interaction flow, AR-guided handover, and workholding"><figcaption><strong>Integrated assistance.</strong> Task state and component layout ground spoken or ray-based requests, robot fetching, handover, and workholding.</figcaption><div class="figure-analysis"><p>Controlled studies isolate the value of each interaction mechanism. In part acquisition, gesture selection produced a 19.9% wrong-selection rate, while both language conditions grounded every requested part correctly; task-state information helped interpret 57 of 231 requests and was unanimously preferred by all 11 participants. In workholding, nine of eleven participants ranked the hybrid method first, reflecting its balance of robot support and human repositioning control.</p></div></figure>
-      <div class="project-actions"><a class="button button-dark" href="paper.pdf" target="_blank" rel="noreferrer">View manuscript</a><a class="button" href="../../index.html#publications">All publications</a></div>
-    </div></section>
+    <section id="h2h" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>2</span><p>H2H analysis</p></div><div class="paper-content">
+      <h2>What human helpers actually do.</h2>
+      <p>In the DYAD dataset, 20 participants assembled a four-row gearbox with a trained helper, without step-by-step instructions. Rows can be built in any order, but each row has hidden ordering constraints: fastening both gear stands first blocks the gear rod and forces rework.</p>
+      <figure class="project-figure"><img src="images/fig-task.webp" alt="Completed four-row gearbox and the task graph for Row 1" loading="lazy"><figcaption><strong>Figure 2.</strong> Left: the completed gearbox. Right: task graph for Row 1; dashed steps need workholding assistance.</figcaption></figure>
+      <figure class="project-figure"><img src="images/fig-h2h.webp" alt="Performer and helper setup with handover, workholding, and part-reference behaviours" loading="lazy"><figcaption><strong>Figure 3.</strong> H2H coassembly: (A) performer–helper setup, (B) part retrieval and handover, (C) workholding during insertion and fastening, (D) verbal and deictic part references.</figcaption></figure>
+      <p>We analysed 851 annotated assistance events and 656 descriptor mentions in part-referring expressions:</p>
+      <figure class="project-figure"><img src="images/fig-analysis.webp" alt="Distribution of assistance triggers and of descriptors used in part references" loading="lazy"><figcaption><strong>Figure 4.</strong> (A) Assistance triggers across 851 events. (B) Descriptors used across 656 part-reference mentions.</figcaption></figure>
+      <h3>Design requirements</h3>
+      <ul>
+        <li><strong>D1 · Physical assistance</strong> (24.4% of events): fetching out-of-reach parts and tools (20.2%) and stabilising the workpiece (4.2%).</li>
+        <li><strong>D2 · Progress-aware assistance</strong> (29.0%): help locating parts (14.6%) and deciding the next step (14.5%), which calls for explicit task and workspace state.</li>
+        <li><strong>D3 · Flexible part references:</strong> people combine spatial or deictic cues (37.2%), shape (20.1%), relative size (18.1%), hole count, colour, and screw type, so requests should not need predefined names.</li>
+      </ul>
+      <p>Error correction was the largest category (35.4%). H2H2R addresses it preventively, through an AR model of the gearbox that users can compare with the physical assembly; online error detection is future work.</p>
+    </div></div></section>
+
+    <section id="system" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>3</span><p>System</p></div><div class="paper-content">
+      <h2>Robot assistance tied to a shared assembly state.</h2>
+      <p>A part and tool layout file and per-row task graphs define the shared state. AR interactions update which operations are active, completed, and valid next; that state grounds language requests to an LLM and drives robot retrieval, handover, and workholding. Robot motion near the user is filtered by an operational-space control-barrier-function QP that keeps clearance from the tracked hand, obstacles, and workspace bounds.</p>
+      <figure class="project-figure"><img src="images/fig-flow.webp" alt="H2H2R information and interaction flow between task description, LLM, AR Gearbox, and robot skills" loading="lazy"><figcaption><strong>Figure 5.</strong> Information and interaction flow. The part and tool layout supports language grounding and ray selection; AR Gearbox interactions update the assembly state; spoken or ray-based requests trigger retrieval and handover; selecting the AR robot starts workholding.</figcaption></figure>
+      <h3>Retrieval and handover (D1)</h3>
+      <p>The user names an item in free-form speech or selects it with an AR ray; the robot fetches it from the pegboard and delivers it to a pose the user sets with a hand-tracked ghost gripper.</p>
+      <figure class="project-figure"><img src="images/fig-handover.webp" alt="AR-guided handover with a ghost gripper changing colour as the robot approaches" loading="lazy"><figcaption><strong>Figure 6.</strong> AR-guided handover: the ghost gripper turns from red to orange to green as the robot reaches the handover pose.</figcaption></figure>
+      <h3>Robot-assisted workholding (D1)</h3>
+      <p>The robot grasps the baseboard when the user inserts it (a 15 N force change closes the gripper) and holds it while stands and rods are installed. The user repositions it by guiding the robot by hand (Freedrive), by moving a virtual replica with an AR handle, or by switching between the two (Hybrid).</p>
+      <figure class="project-figure"><img src="images/fig-workholding.webp" alt="AR-guided workholding: release AR handle, locked grasp, board moved to target" loading="lazy"><figcaption><strong>Figure 7.</strong> AR-guided workholding: (A) releasing the AR handle confirms the target pose, (B) the robot keeps its grasp while moving, (C) the board reaches the target.</figcaption></figure>
+      <h3>Progress-aware AR Gearbox (D2, D3)</h3>
+      <p>The AR Gearbox shows each operation’s state and blocks steps whose prerequisites are unmet. The active step lets the system answer “What should I do?” or “What parts do I need?”, and resolve underspecified requests such as “the gear rod” without naming the row.</p>
+      <figure class="project-figure"><img src="images/fig-ar-gearbox.webp" alt="AR Gearbox global and local views through the steps of Row 1" loading="lazy"><figcaption><strong>Figure 8.</strong> Progress-aware guidance: the global view (bottom) tracks progress; selecting an operation opens a local view (top) with the relevant parts and an animation. A wrong step (A) is flagged in red.</figcaption></figure>
+    </div></div></section>
+
+    <section id="evaluation" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>4</span><p>Evaluation</p></div><div class="paper-content">
+      <h2>Three module-level experiments.</h2>
+      <p>The same 11 participants took part in all three experiments, each isolating one capability.</p>
+      <h3>Experiment 1 · Free-form part references (D3)</h3>
+      <p>For each of the 26 gearbox components, participants wrote a description that uniquely identified it (286 expressions), complemented by 288 authored ones. Leading open-weight models ground these reliably from text alone.</p>
+      <div class="table-wrap"><table class="result-table">
+        <caption><strong>Table 1.</strong> Lenient top-1 accuracy (%) on 288 synthetic and 286 participant expressions, and mean latency; selected models.</caption>
+        <thead><tr><th>Model</th><th>Synthetic</th><th>Participant</th><th>Total</th><th>Latency (s)</th></tr></thead>
+        <tbody>
+          <tr class="highlight"><td>Qwen3-VL-8B</td><td>98.6</td><td>96.2</td><td>97.4</td><td>1.02</td></tr>
+          <tr><td>Gemma3-12B</td><td>98.6</td><td>95.8</td><td>97.2</td><td>2.65</td></tr>
+          <tr><td>Gemma4-E4B</td><td>93.8</td><td>95.8</td><td>94.8</td><td>1.31</td></tr>
+          <tr><td>Qwen3-VL-4B</td><td>89.2</td><td>89.9</td><td>89.5</td><td>0.67</td></tr>
+          <tr><td>Llama3.2-Vision-11B</td><td>83.3</td><td>73.4</td><td>78.4</td><td>0.92</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Experiment 2 · Workholding interfaces (D1)</h3>
+      <p>Participants repositioned a robot-held board to eight targets with each interface. The interfaces trade off: Freedrive is fastest, while Hybrid needs the least hand travel and active interaction and was ranked first by 9 of 11 participants.</p>
+      <div class="table-wrap"><table class="result-table">
+        <caption><strong>Table 2.</strong> Workholding, mean ± SD. Controllability on a 7-point scale; preference is the mean rank (1 = best).</caption>
+        <thead><tr><th>Measure</th><th>Freedrive</th><th>AR handle</th><th>Hybrid</th></tr></thead>
+        <tbody>
+          <tr><td>Completion time (s) ↓</td><td>10.5 ± 4.4</td><td>21.0 ± 5.8</td><td>15.5 ± 3.0</td></tr>
+          <tr><td>Interaction time (s) ↓</td><td>9.3 ± 3.5</td><td>9.7 ± 4.3</td><td>5.8 ± 2.2</td></tr>
+          <tr><td>Right-hand path (m) ↓</td><td>2.0 ± 0.7</td><td>1.5 ± 0.2</td><td>1.2 ± 0.2</td></tr>
+          <tr><td>Adjustment controllability ↑</td><td>4.7 ± 1.0</td><td>5.3 ± 1.2</td><td>6.2 ± 0.7</td></tr>
+          <tr><td>Preference rank ↓</td><td>2.6</td><td>2.3</td><td>1.2</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Experiment 3 · Task-aware part acquisition (D2, D3)</h3>
+      <p>Participants acquired parts by AR ray (Gesture), by a fully specified description (Language), or by short context-dependent requests constrained by the current assembly step (Task-Aware), such as “the gear rod” or “the other one”.</p>
+      <div class="table-wrap"><table class="result-table">
+        <caption><strong>Table 3.</strong> Part acquisition, mean ± SD. NASA-TLX on 0–100.</caption>
+        <thead><tr><th>Measure</th><th>Gesture</th><th>Language</th><th>Task-Aware</th></tr></thead>
+        <tbody>
+          <tr><td>Wrong selections (%) ↓</td><td>19.9 ± 9.9</td><td>0.0</td><td>0.0</td></tr>
+          <tr><td>Hand travel per step (m) ↓</td><td>2.86 ± 1.08</td><td>1.47 ± 1.25</td><td>1.13 ± 1.33</td></tr>
+          <tr><td>NASA-TLX workload ↓</td><td>44.4 ± 26.7</td><td>27.5 ± 13.8</td><td>15.4 ± 11.4</td></tr>
+          <tr><td>Preference rank ↓</td><td>2.6</td><td>2.5</td><td>1.0</td></tr>
+        </tbody>
+      </table></div>
+      <p>Both language conditions grounded every request correctly. Task state helped interpret 57 of 231 Task-Aware requests (24.7%), and all 11 participants ranked Task-Aware first.</p>
+    </div></div></section>
+
+    <section id="future" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>5</span><p>Future work</p></div><div class="paper-content">
+      <h2>Scope and next steps.</h2>
+      <p>The experiments evaluate each capability separately; they show complementary benefits but do not establish end-to-end superiority of the integrated system. Next steps:</p>
+      <ul>
+        <li><strong>Clarification:</strong> ask questions and give feedback when a request matches several components.</li>
+        <li><strong>End-to-end evaluation:</strong> assess the integrated system on a more complex, complete assembly task.</li>
+        <li><strong>Online error detection:</strong> monitor assembly actions to catch errors as they happen, beyond preventive guidance.</li>
+      </ul>
+      <div class="project-note"><p><strong>Review note.</strong> This paper is under review, and author information is withheld until the review concludes.</p></div>
+      <div class="project-links"><a class="button button-dark" href="paper.pdf" target="_blank" rel="noreferrer">Manuscript (PDF)</a><a class="button" href="../../index.html#publications">All publications</a></div>
+    </div></div></section>
   </main>
   <footer class="site-footer wrap"><span>© <span id="year"></span> Seok Joon Kim</span><a href="#top">Back to top</a></footer><script src="../../script.js"></script>
 </body>
