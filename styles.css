@@ -107,14 +107,18 @@ h1, h2, h3, p, figure { margin-top: 0; }
 .education-item p { margin-bottom: 0; font-size: 14px; }
 .education-item .detail { color: var(--muted); }
 .education-map { margin: 34px 0 0; }
-.education-map svg { display: block; width: 100%; height: auto; border: 1px solid var(--line); }
-.education-map figcaption { margin-top: 9px; color: var(--muted); font-size: 11px; }
-.map-sea { fill: #f1f2ee; }
-.map-land { fill: #d8ddd7; stroke: #c7cdc7; stroke-width: 1; }
-.map-route { fill: none; stroke: #819187; stroke-width: 1.5; stroke-dasharray: 5 6; }
+.education-map-canvas { position: relative; overflow: hidden; background: #eef0ec; border: 1px solid var(--line); }
+.education-map-canvas > img { display: block; width: 100%; height: auto; filter: grayscale(1); opacity: .32; }
+.education-map-canvas > svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.education-map figcaption { margin-top: 9px; color: var(--muted); font-size: 10px; line-height: 1.55; }
+.education-map figcaption a { color: var(--accent); }
+.map-route { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 8 7; }
+.education-map marker path { fill: var(--accent); }
 .map-point circle { fill: var(--accent); }
 .map-point .map-ring { fill: none; stroke: var(--accent); stroke-width: 1.5; opacity: .45; }
-.map-point text { fill: var(--text); font: 500 12px var(--sans); }
+.map-point text { fill: var(--text); paint-order: stroke; stroke: var(--background); stroke-width: 5px; stroke-linejoin: round; }
+.map-point .map-city { font: 600 16px var(--sans); }
+.map-point .map-year { fill: var(--muted); font: 500 12px var(--sans); }
 
 .experience-list { border-top: 1px solid var(--line); }
 .experience-item {
@@ -224,6 +228,9 @@ h1, h2, h3, p, figure { margin-top: 0; }
 .project-figure img { width: 100%; height: auto; }
 .project-figure figcaption { padding: 15px 18px 17px; color: var(--muted); font-size: 12px; line-height: 1.55; }
 .project-figure figcaption strong { color: var(--text); font-weight: 600; }
+.figure-analysis { padding: 17px 18px 19px; border-top: 1px solid var(--line); }
+.figure-analysis h3 { margin-bottom: 5px; color: var(--text); font: 500 17px/1.4 var(--serif); }
+.figure-analysis p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.65; }
 .figure-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
 .figure-grid .project-figure { margin-bottom: 0; }
 .key-results { display: grid; grid-template-columns: repeat(3, 1fr); margin: 42px 0; border-block: 1px solid var(--line); }
