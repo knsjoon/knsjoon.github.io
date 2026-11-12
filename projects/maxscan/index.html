@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="MAXSCAN: an iOS app from MAXST for scanning, meshing, and texturing objects and rooms on everyday devices for AR and VR.">
+  <title>MAXSCAN — Seok Joon Kim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="project-page">
+  <header class="site-header"><a class="wordmark" href="../../index.html">Seok Joon Kim</a><button class="menu-button" aria-expanded="false" aria-controls="site-nav">Menu</button><nav id="site-nav" class="site-nav" aria-label="Primary navigation"><a href="../../index.html#about">About</a><a href="../../index.html#experience">Experience</a><a href="../../awards/">Awards</a><a href="../../index.html#publications">Publications</a><a href="../../Curriculum_Vitae_Robotics_2024.pdf" target="_blank" rel="noreferrer">CV</a></nav></header>
+  <main id="top">
+    <section class="project-hero wrap">
+      <p class="eyebrow">MAXST · Industry project · iOS</p>
+      <h1>MAXSCAN: Scanning Your Space Using Everyday Devices</h1>
+      <div class="project-summary">
+        <p class="lead">An iOS app that turns an iPhone or iPad into a 3D scanner: capture an object or a room, build a mesh, texture it from high-resolution images, and track it for augmented reality.</p>
+        <dl class="project-facts"><div><dt>Organization</dt><dd>MAXST, Seoul</dd></div><div><dt>Role</dt><dd>Team lead &amp; project manager</dd></div><div><dt>Platform</dt><dd>iOS / iPadOS with LiDAR, released on the App Store</dd></div><div><dt>Topics</dt><dd>Mobile 3D reconstruction, room layout, texturing, inpainting, AR</dd></div></dl>
+      </div>
+      <div class="project-links"><a class="button button-dark" href="../roomrecon/">Related paper: RoomRecon</a><a class="button" href="../../index.html#experience">Experience</a></div>
+    </section>
+
+    <nav class="paper-toc" aria-label="Sections"><ol class="wrap">
+      <li><a href="#overview">Overview</a></li><li><a href="#lidar-mode">LiDAR mode</a></li><li><a href="#room-mode">Room mode</a></li><li><a href="#post-texturing">Post-texturing</a></li><li><a href="#results">Results</a></li><li><a href="#applications">Applications</a></li>
+    </ol></nav>
+
+    <section id="overview" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>1</span><p>Overview</p></div><div class="paper-content">
+      <h2>Two ways to capture a space.</h2>
+      <p class="lead">MAXSCAN offers a LiDAR mode for objects and arbitrary spaces and a Room mode for structured indoor rooms. Both go from capture to mesh to texture on the device, and the result can be tracked in AR.</p>
+      <figure class="project-figure narrow"><img src="images/app-store.webp" alt="MAXSCAN by MAXST on the App Store, with screenshots of spatial map creation, AR editing, AR preview, and upload" loading="lazy"><figcaption><strong>MAXSCAN on the App Store.</strong> Scanned spatial maps can be edited, previewed in AR, and uploaded to the MAXST AR SDK content management system to build AR and VR services.</figcaption></figure>
+    </div></div></section>
+
+    <section id="lidar-mode" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>2</span><p>LiDAR mode</p></div><div class="paper-content">
+      <h2>Complete scans, then sharp textures.</h2>
+      <p>During capture, the interface offers two visualizations: scanned areas drawn in green, or unscanned areas drawn as stripes. Both help the user cover the space fully and get a complete, hole-free mesh. The generated mesh is first vertex-coloured, which looks blurry.</p>
+      <p>The texturing step replaces vertex colours with image texture. Each triangle face acts as a canvas onto which part of a high-resolution image is projected, so the result closely matches the real appearance of the object or space.</p>
+      <figure class="project-figure"><img src="images/lidar-mode.webp" alt="LiDAR mode steps: capture with scanned-area and unscanned-area visualizations, mesh creation, and texturing" loading="lazy"><figcaption><strong>LiDAR mode.</strong> Capture with the two coverage visualizations (left), vertex-coloured mesh (middle), and a textured close-up of the same wall (right).</figcaption></figure>
+    </div></div></section>
+
+    <section id="room-mode" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>3</span><p>Room mode</p></div><div class="paper-content">
+      <h2>Layout and mesh together.</h2>
+      <p>Room mode returns both the layout and the mesh of a room. The capture interface also visualizes the room layout as it is reconstructed, so the user can follow its progress in real time. After capture, the mesh is processed to integrate the detected walls with the object meshes, and then textured.</p>
+      <p>Because the room is described by its walls, the textured mesh can be split into planes. Each 3D plane can then be treated as a 2D image, so standard image processing such as inpainting and super-resolution applies directly. This idea was developed further in <a class="affiliation-link" href="../roomrecon/">RoomRecon</a> (IEEE ISMAR 2024).</p>
+      <figure class="project-figure"><img src="images/room-mode.webp" alt="Room mode steps: capture with live layout, layout and object mesh, texturing, and post-texturing" loading="lazy"><figcaption><strong>Room mode.</strong> Capture with live layout reconstruction, the layout combined with object meshes, texturing, and post-texturing.</figcaption></figure>
+    </div></div></section>
+
+    <section id="post-texturing" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>4</span><p>Post-texturing</p></div><div class="paper-content">
+      <h2>Improving each wall after texturing.</h2>
+      <p>Room mode adds a post-texturing step with three modes for each wall:</p>
+      <ul>
+        <li><strong>Image mode:</strong> fill a wall with an image, optionally refined with inpainting.</li>
+        <li><strong>Sample mode:</strong> repeat a selected sample, such as a brick pattern, across the wall for a consistent finish.</li>
+        <li><strong>Plain-colour mode:</strong> paint the wall in a single colour.</li>
+      </ul>
+      <p>Inpainting fills regions that no image captured, such as a wall hidden behind a cabinet or sofa, and removes unwanted content. The user masks the missing and undesired regions, and the wall image is completed.</p>
+      <figure class="project-figure"><img src="images/inpainting.webp" alt="Two walls shown as original texture with missing regions, the masking step, and the inpainted result" loading="lazy"><figcaption><strong>Image inpainting.</strong> Original wall textures with missing regions behind furniture (left), the masked regions (middle), and the inpainted result (right).</figcaption></figure>
+    </div></div></section>
+
+    <section id="results" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>5</span><p>Results</p></div><div class="paper-content">
+      <h2>A complete, realistic room model.</h2>
+      <p>In the final model, the floor and ceiling are textured with the sample-based mode and the walls are refined with inpainting.</p>
+      <div class="figure-grid">
+        <figure class="project-figure"><img src="images/final-room-1.webp" alt="Final textured room model with a balloon-mural wall and a whiteboard wall" loading="lazy"></figure>
+        <figure class="project-figure"><img src="images/final-room-2.webp" alt="Final textured room model showing a whiteboard wall, a pillar, and a glass door" loading="lazy"></figure>
+      </div>
+    </div></div></section>
+
+    <section id="applications" class="paper-section"><div class="wrap paper-grid"><div class="paper-index"><span>6</span><p>Applications</p></div><div class="paper-content">
+      <h2>From the scanned room to mixed reality.</h2>
+      <p>Because the scanned room can be tracked, content placed in the virtual replica appears at the same spot in the real room. In the example below, a virtual mailbox is placed in the reconstructed room and then viewed in place through AR.</p>
+      <div class="figure-grid figure-grid-compact">
+        <figure class="project-figure small"><img src="images/vr-placement.webp" alt="Placing a virtual mailbox in the reconstructed room" loading="lazy"><figcaption><strong>VR:</strong> placing the object in the reconstructed room.</figcaption></figure>
+        <figure class="project-figure small"><img src="images/ar-view.webp" alt="Viewing the virtual mailbox in the real room through AR" loading="lazy"><figcaption><strong>AR:</strong> viewing it in the real room.</figcaption></figure>
+      </div>
+      <p>Accurate, textured room models support virtual property tours and home staging, interior design planning, letting shoppers place furniture before buying, AR games that use the player’s surroundings, and virtual field trips and labs in education.</p>
+      <div class="project-links"><a class="button button-dark" href="../roomrecon/">RoomRecon paper</a><a class="button" href="../../index.html#publications">All publications</a></div>
+    </div></div></section>
+  </main>
+  <footer class="site-footer wrap"><span>© <span id="year"></span> Seok Joon Kim</span><a href="#top">Back to top</a></footer><script src="../../script.js"></script>
+</body>
+</html>

@@ -366,3 +366,4 @@ h1, h2, h3, p, figure { margin-top: 0; }
 .award-docs img { aspect-ratio: auto; object-fit: contain; border: 1px solid var(--line); border-radius: 2px; }
 @media (max-width: 720px) { .award-docs { grid-template-columns: 1fr; } }
 .award-gallery a { display: block; }
+.figure-grid-compact { max-width: 460px; align-items: start; }
